@@ -12,7 +12,6 @@ class Coord {
 			this->y = y_;
 			this->z = z_;
 		}
-		Coord() {}
 };
 
 class Vector {
@@ -22,8 +21,7 @@ class Vector {
 			this->vStart = vStart_;
 			this->vEnd = vEnd_;
 		}
-		Vector() {}
-
+		
 		void render() {
 			glBegin(GL_LINES);
 				glVertex3f(this->vStart->x, this->vStart->y, this->vStart->z);
