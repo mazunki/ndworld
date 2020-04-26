@@ -21,7 +21,7 @@ class Vector {
 			this->vStart = vStart_;
 			this->vEnd = vEnd_;
 		}
-		
+
 		void render() {
 			glBegin(GL_LINES);
 				glVertex3f(this->vStart->x, this->vStart->y, this->vStart->z);
@@ -39,15 +39,15 @@ class Cube {
 				*v45, *v56, *v67, *v74, \
 				*v04, *v73, *v15, *v62;
 		Cube() {
-			p0 = new Coord(0,0,0);
-			p1 = new Coord(1,0,0);
-			p2 = new Coord(1,1,0);
-			p3 = new Coord(0,1,0);
+			p0 = new Coord(-0.5f, -0.5f, -0.5f);
+			p1 = new Coord(0.5f, -0.5f, -0.5f);
+			p2 = new Coord(0.5f, 0.5f, -0.5f);
+			p3 = new Coord(-0.5f, 0.5f, -0.5f);
 			
-			p4 = new Coord(0,0,1);
-			p5 = new Coord(1,0,1);
-			p6 = new Coord(1,1,1);
-			p7 = new Coord(0,1,1);
+			p4 = new Coord(-0.5f, -0.5f, 0.5f);
+			p5 = new Coord(0.5f, -0.5f, 0.5f);
+			p6 = new Coord(0.5f, 0.5f, 0.5f);
+			p7 = new Coord(-0.5f, 0.5f, 0.5f);
 
 			v01 = new Vector(p0, p1);
 			v12 = new Vector(p1, p2);
@@ -79,16 +79,42 @@ class Cube {
 		}
 };
 
+Cube c;
+float viewX=0.0f, viewY=0.0f, viewZ=0.0f;
+
 void display() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Set background color to black and opaque
 	glClear(GL_COLOR_BUFFER_BIT);  // Clear the color buffer
-	//glEnable();
+    glMatrixMode(GL_MODELVIEW);
+	
+	glRotatef(-30.0, 0.1f, 0.2f, 0.0f);
 
-	Cube c;
 	c.render();
 	glFlush();  // Render now
 }
  
+void keyPressed (unsigned char key, int x, int y) {  
+	if (key == 'q') {
+		exit(0);
+	}
+
+	if (key == 'w') {
+		viewY -= 0.03f;
+	} else if (key == 's') {
+		viewY += 0.03f;
+	} 
+
+	if (key == 'a') {
+		viewX -= 0.03f;
+	} else if (key == 'd') {
+		viewX += 0.03f;
+	}
+	glTranslatef(viewX, viewY, viewZ);
+	glClear(GL_COLOR_BUFFER_BIT); 
+	c.render();
+	glFlush();
+}  
+
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv) {
 	int monWidth=1920, monHeight=1080, winH=600, winW=400;
@@ -101,6 +127,8 @@ int main(int argc, char** argv) {
 
 	glutCreateWindow("n-Dimensional World");
 	glutDisplayFunc(display);
+	glutKeyboardFunc(keyPressed);
+
 	glutMainLoop();
 	
 	return 0;
