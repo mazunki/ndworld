@@ -12,15 +12,17 @@ class Coord {
 			this->y = y_;
 			this->z = z_;
 		}
+		Coord() {}
 };
 
 class Vector {
 	public:
 		Coord *vStart, *vEnd;
-		Vector(Coord vStart_, Coord vEnd_) {
-			this->vStart = &vStart_;
-			this->vEnd = &vEnd_;
+		Vector(Coord *vStart_, Coord *vEnd_) {
+			this->vStart = vStart_;
+			this->vEnd = vEnd_;
 		}
+		Vector() {}
 
 		void render() {
 			glBegin(GL_LINES);
@@ -39,30 +41,28 @@ class Cube {
 				*v45, *v56, *v67, *v74, \
 				*v04, *v73, *v15, *v62;
 		Cube() {
-			Coord p0(0,0,0);
-			Coord p1(1,0,0);
-			Coord p2(1,1,0);
-			Coord p3(0,1,0);
+			p0 = new Coord(0,0,0);
+			p1 = new Coord(1,0,0);
+			p2 = new Coord(1,1,0);
+			p3 = new Coord(0,1,0);
 			
-			Coord p4(0,0,1);
-			Coord p5(1,0,1);
-			Coord p6(1,1,1);
-			Coord p7(0,1,1);
+			p4 = new Coord(0,0,1);
+			p5 = new Coord(1,0,1);
+			p6 = new Coord(1,1,1);
+			p7 = new Coord(0,1,1);
 
-			Vector v01(p0, p1);
-			Vector v12(p1, p2);
-			Vector v23(p2, p3);
-			Vector v30(p3, p0);
-
-			Vector v45(p4, p5);
-			Vector v56(p5, p6);
-			Vector v67(p6, p7);
-			Vector v74(p7, p4);
-
-			Vector v04(p0, p4);
-			Vector v73(p7, p3);
-			Vector v15(p1, p5);
-			Vector v62(p6, p2);
+			v01 = new Vector(p0, p1);
+			v12 = new Vector(p1, p2);
+			v23 = new Vector(p2, p3);
+			v30 = new Vector(p3, p0);
+			v45 = new Vector(p4, p5);
+			v56 = new Vector(p5, p6);
+			v67 = new Vector(p6, p7);
+			v74 = new Vector(p7, p4);
+			v04 = new Vector(p0, p4);
+			v73 = new Vector(p7, p3);
+			v15 = new Vector(p1, p5);
+			v62 = new Vector(p6, p2);
 		}
 
 		void render() {
@@ -84,6 +84,7 @@ class Cube {
 void display() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Set background color to black and opaque
 	glClear(GL_COLOR_BUFFER_BIT);  // Clear the color buffer
+	//glEnable();
 
 	Cube c;
 	c.render();
