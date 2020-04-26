@@ -8,9 +8,9 @@ class Coord {
 	public:
 		float x, y, z;
 		Coord(float x_, float y_, float z_) {
-			this->x = x_;
-			this->y = y_;
-			this->z = z_;
+			this->x = x_/4.0f;
+			this->y = y_/4.0f;
+			this->z = z_/4.0f;
 		}
 };
 
@@ -38,6 +38,7 @@ class Cube {
 		Vector *v01, *v12, *v23, *v30, \
 				*v45, *v56, *v67, *v74, \
 				*v04, *v73, *v15, *v62;
+		Vector *v71, *v60;
 		Cube() {
 			p0 = new Coord(-0.5f, -0.5f, -0.5f);
 			p1 = new Coord(0.5f, -0.5f, -0.5f);
@@ -61,6 +62,9 @@ class Cube {
 			v73 = new Vector(p7, p3);
 			v15 = new Vector(p1, p5);
 			v62 = new Vector(p6, p2);
+
+			v71 = new Vector(p7, p1);
+			v60 = new Vector(p6, p0);
 		}
 
 		void render() {
@@ -76,6 +80,9 @@ class Cube {
 			v73->render();
 			v15->render();
 			v62->render();
+
+			v71->render();
+			v60->render();
 		}
 };
 
@@ -109,11 +116,35 @@ void keyPressed (unsigned char key, int x, int y) {
 	} else if (key == 'd') {
 		viewX += 0.03f;
 	}
+	glClear(GL_COLOR_BUFFER_BIT);
 	glTranslatef(viewX, viewY, viewZ);
-	glClear(GL_COLOR_BUFFER_BIT); 
+	viewX=0.0f;
+	viewY=0.0f;
+	viewZ=0.0f;
 	c.render();
 	glFlush();
 }  
+
+void mouseClick(int button, int state, int x, int y) {
+	if (state==GLUT_DOWN) {
+		if (button==3) {
+			viewZ=0.03f;
+			glTranslatef(viewX, viewY, viewZ);
+			viewZ=0.0f;
+			glClear(GL_COLOR_BUFFER_BIT);
+			c.render();
+			glFlush();
+		}
+		if (button==4) {
+			viewZ=-0.03f;
+			glTranslatef(viewX, viewY, viewZ);
+			viewZ=0.0f;
+			glClear(GL_COLOR_BUFFER_BIT);
+			c.render();
+			glFlush();
+		}
+	}
+}
 
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv) {
@@ -128,6 +159,8 @@ int main(int argc, char** argv) {
 	glutCreateWindow("n-Dimensional World");
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyPressed);
+	glutMouseFunc(mouseClick);
+
 
 	glutMainLoop();
 	
